@@ -1,0 +1,743 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Scrapbook của chúng mình</title>
+  <meta name="description" content="Một scrapbook nhỏ dành cho người thương." />
+  <style>
+    :root{
+      --paper: #fbf4e7;
+      --paper2:#fffdf7;
+      --ink:#2a2a2a;
+      --muted:#6b6b6b;
+      --accent:#ff4d6d;
+      --tape:#f7d87c;
+      --shadow: 0 18px 40px rgba(0,0,0,.12);
+      --shadow2: 0 10px 22px rgba(0,0,0,.10);
+      --radius: 18px;
+      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      --sans: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
+    }
+
+    *{ box-sizing:border-box; }
+    html,body{ height:100%; }
+    body{
+      margin:0;
+      font-family: var(--sans);
+      color:var(--ink);
+      background:
+        radial-gradient(1200px 900px at 10% 0%, rgba(255,77,109,.10), transparent 60%),
+        radial-gradient(1000px 700px at 90% 20%, rgba(247,216,124,.22), transparent 55%),
+        linear-gradient(180deg, #fff 0%, #fff 35%, #f7f1e6 100%);
+    }
+
+    /* subtle paper noise */
+    body::before{
+      content:"";
+      position:fixed; inset:0;
+      pointer-events:none;
+      background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='220' height='220' filter='url(%23n)' opacity='.09'/%3E%3C/svg%3E");
+      mix-blend-mode:multiply;
+      opacity:.35;
+    }
+
+    a{ color:inherit; text-decoration:none; }
+    .wrap{
+      max-width: 1050px;
+      margin: 0 auto;
+      padding: 26px 16px 70px;
+      position:relative;
+    }
+
+    header{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      padding: 10px 2px 20px;
+      position:sticky;
+      top:0;
+      backdrop-filter: blur(8px);
+      background: linear-gradient(180deg, rgba(255,255,255,.72) 0%, rgba(255,255,255,.45) 100%);
+      border-bottom: 1px solid rgba(0,0,0,.06);
+      z-index:10;
+    }
+
+    .brand{
+      display:flex;
+      align-items:center;
+      gap:12px;
+    }
+    .badge{
+      width:44px; height:44px;
+      border-radius: 14px;
+      background: linear-gradient(145deg, rgba(255,77,109,.20), rgba(247,216,124,.35));
+      box-shadow: 0 10px 20px rgba(0,0,0,.10);
+      display:grid;
+      place-items:center;
+      position:relative;
+      overflow:hidden;
+    }
+    .badge::after{
+      content:"";
+      position:absolute; inset:-40%;
+      background: repeating-linear-gradient(45deg, rgba(255,255,255,.50) 0 10px, rgba(255,255,255,.0) 10px 20px);
+      transform: rotate(10deg);
+      opacity:.45;
+    }
+    .badge span{
+      position:relative;
+      font-size:18px;
+    }
+    .brand h1{
+      margin:0;
+      font-size: 16px;
+      letter-spacing:.2px;
+      line-height:1.15;
+    }
+    .brand .sub{
+      display:block;
+      font-size:12px;
+      color:var(--muted);
+      margin-top:2px;
+      font-family: var(--mono);
+    }
+
+    nav{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      justify-content:flex-end;
+    }
+    .chip{
+      padding: 10px 12px;
+      border-radius: 999px;
+      background: rgba(255,255,255,.75);
+      border: 1px solid rgba(0,0,0,.08);
+      box-shadow: 0 8px 18px rgba(0,0,0,.06);
+      font-size: 13px;
+      transition: transform .15s ease, box-shadow .15s ease;
+      user-select:none;
+    }
+    .chip:hover{ transform: translateY(-1px); box-shadow: 0 12px 22px rgba(0,0,0,.09); }
+    .chip:active{ transform: translateY(0); }
+
+    /* Hero */
+    .hero{
+      margin-top: 18px;
+      background: linear-gradient(180deg, rgba(255,255,255,.84), rgba(255,255,255,.62));
+      border: 1px solid rgba(0,0,0,.08);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow:hidden;
+      position:relative;
+    }
+    .heroGrid{
+      display:grid;
+      grid-template-columns: 1.2fr .8fr;
+      gap: 0;
+      min-height: 360px;
+    }
+    @media (max-width: 860px){
+      .heroGrid{ grid-template-columns: 1fr; }
+    }
+
+    .heroLeft{
+      padding: 26px 24px 24px;
+      position:relative;
+    }
+
+    .tape{
+      position:absolute;
+      top: 16px;
+      left: 18px;
+      transform: rotate(-5deg);
+      background: linear-gradient(180deg, rgba(247,216,124,.92), rgba(247,216,124,.70));
+      border: 1px solid rgba(0,0,0,.12);
+      padding: 8px 12px;
+      border-radius: 10px;
+      box-shadow: 0 10px 18px rgba(0,0,0,.12);
+      font-family: var(--mono);
+      font-size: 12px;
+      opacity:.95;
+    }
+
+    .heroTitle{
+      margin: 44px 0 10px;
+      font-size: clamp(26px, 3.2vw, 38px);
+      line-height: 1.12;
+      letter-spacing: .2px;
+    }
+    .heroTitle b{
+      color: var(--accent);
+    }
+    .heroText{
+      margin: 0 0 16px;
+      color: #3a3a3a;
+      font-size: 15px;
+      line-height: 1.65;
+      max-width: 56ch;
+    }
+
+    .ctaRow{ display:flex; gap:10px; flex-wrap:wrap; margin-top:16px; }
+    .btn{
+      border: none;
+      cursor:pointer;
+      padding: 11px 14px;
+      border-radius: 14px;
+      font-size: 14px;
+      background: #fff;
+      border:1px solid rgba(0,0,0,.10);
+      box-shadow: 0 10px 20px rgba(0,0,0,.10);
+      transition: transform .15s ease, box-shadow .15s ease;
+      user-select:none;
+    }
+    .btn:hover{ transform: translateY(-1px); box-shadow: 0 14px 26px rgba(0,0,0,.12); }
+    .btn.primary{
+      background: linear-gradient(135deg, rgba(255,77,109,.95), rgba(255,77,109,.75));
+      color:#fff;
+      border: 1px solid rgba(0,0,0,.08);
+    }
+
+    .heroRight{
+      background: var(--paper);
+      display:grid;
+      place-items:center;
+      padding: 22px;
+      position:relative;
+    }
+
+    .polaroid{
+      width:min(310px, 100%);
+      background: #fff;
+      border-radius: 14px;
+      box-shadow: var(--shadow2);
+      border: 1px solid rgba(0,0,0,.10);
+      padding: 12px 12px 16px;
+      transform: rotate(2.6deg);
+      position:relative;
+    }
+    .polaroid::before{
+      content:"";
+      position:absolute;
+      top:-14px; left: 18px;
+      width: 72px; height: 26px;
+      background: rgba(247,216,124,.78);
+      border: 1px solid rgba(0,0,0,.10);
+      border-radius: 8px;
+      transform: rotate(-6deg);
+      box-shadow: 0 8px 14px rgba(0,0,0,.10);
+    }
+    .polaroid img{
+      width:100%;
+      height: 220px;
+      object-fit: cover;
+      border-radius: 12px;
+      border: 1px solid rgba(0,0,0,.08);
+      display:block;
+      background: #f2f2f2;
+    }
+    .polaroid .cap{
+      margin: 10px 2px 0;
+      font-family: var(--mono);
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    /* Sections */
+    .section{
+      margin-top: 18px;
+      background: linear-gradient(180deg, rgba(255,255,255,.86), rgba(255,255,255,.65));
+      border: 1px solid rgba(0,0,0,.08);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 18px;
+      position:relative;
+      overflow:hidden;
+    }
+    .section h2{
+      margin: 0 0 10px;
+      font-size: 18px;
+      letter-spacing:.2px;
+      display:flex;
+      align-items:center;
+      gap:10px;
+    }
+    .section h2 .tag{
+      font-family: var(--mono);
+      font-size: 12px;
+      color: var(--muted);
+      background: rgba(0,0,0,.04);
+      border: 1px solid rgba(0,0,0,.08);
+      padding: 6px 10px;
+      border-radius: 999px;
+    }
+    .note{
+      border-left: 4px solid rgba(255,77,109,.65);
+      background: rgba(255,77,109,.06);
+      padding: 12px 12px;
+      border-radius: 14px;
+      line-height:1.7;
+      color:#2f2f2f;
+      position:relative;
+    }
+    .note small{ color:var(--muted); display:block; margin-top:8px; font-family:var(--mono); }
+
+    /* Timeline */
+    .timeline{
+      display:grid;
+      gap: 12px;
+      margin-top: 10px;
+    }
+    .tItem{
+      display:grid;
+      grid-template-columns: 120px 1fr;
+      gap: 12px;
+      align-items:start;
+      padding: 12px;
+      border-radius: 16px;
+      background: rgba(255,255,255,.78);
+      border: 1px dashed rgba(0,0,0,.14);
+      box-shadow: 0 10px 18px rgba(0,0,0,.06);
+      position:relative;
+    }
+    @media (max-width: 560px){
+      .tItem{ grid-template-columns: 1fr; }
+    }
+    .date{
+      font-family: var(--mono);
+      font-size: 12px;
+      color: var(--muted);
+      padding: 8px 10px;
+      border-radius: 12px;
+      background: rgba(247,216,124,.26);
+      border: 1px solid rgba(0,0,0,.10);
+      display:inline-block;
+      width: fit-content;
+    }
+    .tTitle{
+      margin:0 0 4px;
+      font-weight: 700;
+    }
+    .tDesc{
+      margin:0;
+      color:#3a3a3a;
+      line-height:1.65;
+      font-size: 14px;
+    }
+
+    /* Gallery */
+    .gallery{
+      margin-top: 12px;
+      display:grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+    }
+    @media (max-width: 950px){ .gallery{ grid-template-columns: repeat(3,1fr); } }
+    @media (max-width: 650px){ .gallery{ grid-template-columns: repeat(2,1fr); } }
+
+    .card{
+      background:#fff;
+      border-radius: 16px;
+      border: 1px solid rgba(0,0,0,.10);
+      box-shadow: 0 12px 24px rgba(0,0,0,.10);
+      overflow:hidden;
+      position:relative;
+      transform: rotate(var(--r, 0deg));
+      transition: transform .15s ease, box-shadow .15s ease;
+      cursor: zoom-in;
+    }
+    .card:hover{ transform: rotate(var(--r,0deg)) translateY(-2px); box-shadow: 0 18px 34px rgba(0,0,0,.14); }
+    .card .img{
+      width:100%;
+      aspect-ratio: 4 / 3;
+      object-fit: cover;
+      display:block;
+      background:#eee;
+    }
+    .card .lbl{
+      padding: 10px 10px 12px;
+      font-family: var(--mono);
+      font-size: 12px;
+      color: var(--muted);
+    }
+    .sticker{
+      position:absolute;
+      top:10px; right:10px;
+      padding: 7px 10px;
+      border-radius: 999px;
+      font-size: 12px;
+      background: rgba(255,255,255,.86);
+      border: 1px solid rgba(0,0,0,.12);
+      box-shadow: 0 10px 18px rgba(0,0,0,.10);
+      user-select:none;
+      transform: rotate(8deg);
+    }
+
+    /* Footer */
+    footer{
+      margin-top: 18px;
+      text-align:center;
+      color: var(--muted);
+      font-family: var(--mono);
+      font-size: 12px;
+      opacity:.9;
+    }
+
+    /* Modal */
+    .modal{
+      position:fixed; inset:0;
+      background: rgba(0,0,0,.58);
+      display:none;
+      align-items:center;
+      justify-content:center;
+      padding: 18px;
+      z-index: 999;
+    }
+    .modal.open{ display:flex; }
+    .modalBox{
+      width:min(980px, 100%);
+      background: rgba(255,255,255,.92);
+      border: 1px solid rgba(255,255,255,.35);
+      border-radius: 20px;
+      box-shadow: 0 30px 80px rgba(0,0,0,.30);
+      overflow:hidden;
+      position:relative;
+      backdrop-filter: blur(8px);
+    }
+    .modalTop{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:10px;
+      padding: 12px 14px;
+      border-bottom: 1px solid rgba(0,0,0,.08);
+      background: linear-gradient(180deg, rgba(255,255,255,.9), rgba(255,255,255,.75));
+    }
+    .modalTop .mTitle{
+      font-family: var(--mono);
+      color: var(--muted);
+      font-size: 12px;
+      overflow:hidden;
+      text-overflow:ellipsis;
+      white-space:nowrap;
+      max-width: 78%;
+    }
+    .x{
+      border:none;
+      background: rgba(0,0,0,.06);
+      border: 1px solid rgba(0,0,0,.12);
+      border-radius: 12px;
+      padding: 8px 10px;
+      cursor:pointer;
+      font-family: var(--mono);
+    }
+    .modalImg{
+      width:100%;
+      max-height: 74vh;
+      object-fit: contain;
+      background: #111;
+      display:block;
+    }
+    .modalCap{
+      padding: 12px 14px 16px;
+      line-height:1.6;
+      color:#2f2f2f;
+    }
+    .modalCap b{ color: var(--accent); }
+    .modalCap .hint{ color: var(--muted); font-family:var(--mono); font-size:12px; margin-top:6px; }
+
+    /* Floating hearts */
+    .heart{
+      position:fixed;
+      left: var(--x);
+      top: 110%;
+      font-size: var(--s);
+      opacity: .85;
+      filter: drop-shadow(0 10px 8px rgba(0,0,0,.14));
+      animation: floatUp var(--d) linear forwards;
+      pointer-events:none;
+      z-index: 2;
+    }
+    @keyframes floatUp{
+      0%{ transform: translateY(0) rotate(0deg); opacity:0; }
+      10%{ opacity:.85; }
+      100%{ transform: translateY(-140vh) rotate(360deg); opacity:0; }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="wrap">
+    <header>
+      <div class="brand">
+        <div class="badge" aria-hidden="true"><span>💌</span></div>
+        <div>
+          <h1>Scrapbook của chúng mình</h1>
+          <span class="sub">made with love • update anytime</span>
+        </div>
+      </div>
+      <nav>
+        <a class="chip" href="#thu">Lá thư</a>
+        <a class="chip" href="#timeline">Kỷ niệm</a>
+        <a class="chip" href="#album">Album</a>
+        <button class="chip" id="btnHearts" type="button">Thả tim ✨</button>
+      </nav>
+    </header>
+
+    <section class="hero" id="top">
+      <div class="heroGrid">
+        <div class="heroLeft">
+          <div class="tape">23 • 02 • 2026</div>
+          <h2 class="heroTitle">Gửi <b>em</b>, người làm ngày của anh đẹp hơn</h2>
+          <p class="heroText">
+            Đây là một góc nhỏ anh làm như kiểu scrapbook — để cất những điều giản dị nhưng quý.
+            Mỗi lần em xem, coi như anh đang ở cạnh, nhắc em nhớ: <b>em rất được yêu</b>.
+          </p>
+
+          <div class="ctaRow">
+            <button class="btn primary" id="btnSecret" type="button">Bấm để mở “bí mật” 💗</button>
+            <a class="btn" href="#album">Xem album 📸</a>
+            <a class="btn" href="#timeline">Đi qua kỷ niệm 🗓️</a>
+          </div>
+        </div>
+
+        <div class="heroRight">
+          <div class="polaroid">
+            <img src="assets/hero.jpg" alt="Ảnh bìa (thay bằng ảnh của bạn)" onerror="this.src='data:image/svg+xml;charset=UTF-8,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22900%22 height=%22560%22%3E%3Crect width=%22900%22 height=%22560%22 fill=%22%23eaeaea%22/%3E%3Ctext x=%2250%25%22 y=%2250%25%22 dominant-baseline=%22middle%22 text-anchor=%22middle%22 font-family=%22Arial%22 font-size=%2230%22 fill=%22%23666%22%3Eassets/hero.jpg%3C/text%3E%3C/svg%3E';" />
+            <div class="cap">“Một ngày bình thường” mà có em là thành đặc biệt.</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="thu">
+      <h2>📝 Lá thư <span class="tag">letter</span></h2>
+      <div class="note">
+        Em ơi,<br/>
+        Anh không giỏi nói dài, nên anh làm một trang nhỏ để gom hết những điều anh muốn giữ.<br/>
+        Nếu có lúc em mệt, hãy mở trang này. Mỗi tấm ảnh là một cái ôm, mỗi dòng chữ là một lời nhắc rằng:
+        <b>chúng mình đã đi được xa lắm rồi</b> — và vẫn còn nhiều điều dễ thương phía trước.<br/>
+        <small>— Ký tên: Anh (thay tên ở đây) • (thay ngày) </small>
+      </div>
+    </section>
+
+    <section class="section" id="timeline">
+      <h2>🗓️ Kỷ niệm <span class="tag">timeline</span></h2>
+      <div class="timeline">
+        <div class="tItem">
+          <div><span class="date">2024-06-01</span></div>
+          <div>
+            <p class="tTitle">Lần đầu gặp nhau</p>
+            <p class="tDesc">Em cười một cái là anh thấy… thôi xong rồi 😭 (đổi thành câu chuyện thật của bạn)</p>
+          </div>
+        </div>
+
+        <div class="tItem">
+          <div><span class="date">2024-10-20</span></div>
+          <div>
+            <p class="tTitle">Một ngày đáng nhớ</p>
+            <p class="tDesc">Chúng mình đi (địa điểm)… và anh nghĩ “mình muốn những ngày như vậy thật lâu”.</p>
+          </div>
+        </div>
+
+        <div class="tItem">
+          <div><span class="date">2025-02-14</span></div>
+          <div>
+            <p class="tTitle">Valentine</p>
+            <p class="tDesc">Anh không cần quà đắt, chỉ cần em ở đây — thế là đủ.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="album">
+      <h2>📸 Album <span class="tag">polaroids</span></h2>
+      <p style="margin:0 0 8px; color:var(--muted); line-height:1.6;">
+        Tip: thay ảnh trong <b>assets/</b>. Bấm vào ảnh để phóng to.
+      </p>
+
+      <div class="gallery" id="gallery">
+        <!-- You can duplicate these cards -->
+        <figure class="card" style="--r:-1.8deg" data-src="assets/p1.jpg" data-title="Ngày hôm đó" data-cap="Em mặc (…); anh nhớ mãi.">
+          <img class="img" src="assets/p1.jpg" alt="p1" onerror="placeholder(this)" />
+          <figcaption class="lbl">📌 “Ngày hôm đó”</figcaption>
+          <span class="sticker">⭐</span>
+        </figure>
+
+        <figure class="card" style="--r:1.2deg" data-src="assets/p2.jpg" data-title="Một góc nhỏ" data-cap="Chúng mình ngồi nói chuyện tới khuya.">
+          <img class="img" src="assets/p2.jpg" alt="p2" onerror="placeholder(this)" />
+          <figcaption class="lbl">🍰 “Một góc nhỏ”</figcaption>
+          <span class="sticker">💛</span>
+        </figure>
+
+        <figure class="card" style="--r:-.6deg" data-src="assets/p3.jpg" data-title="Đi cùng nhau" data-cap="Đường dài mà có em thì vui.">
+          <img class="img" src="assets/p3.jpg" alt="p3" onerror="placeholder(this)" />
+          <figcaption class="lbl">🧭 “Đi cùng nhau”</figcaption>
+          <span class="sticker">🫶</span>
+        </figure>
+
+        <figure class="card" style="--r:2.3deg" data-src="assets/p4.jpg" data-title="Cười lên nhé" data-cap="Nụ cười của em là phép màu.">
+          <img class="img" src="assets/p4.jpg" alt="p4" onerror="placeholder(this)" />
+          <figcaption class="lbl">🌷 “Cười lên nhé”</figcaption>
+          <span class="sticker">✨</span>
+        </figure>
+
+        <figure class="card" style="--r:-2.1deg" data-src="assets/p5.jpg" data-title="Bình yên" data-cap="Bình yên là khi em tựa vào vai anh.">
+          <img class="img" src="assets/p5.jpg" alt="p5" onerror="placeholder(this)" />
+          <figcaption class="lbl">🕊️ “Bình yên”</figcaption>
+          <span class="sticker">☁️</span>
+        </figure>
+
+        <figure class="card" style="--r:1.6deg" data-src="assets/p6.jpg" data-title="Một lời hứa" data-cap="Mình sẽ cùng nhau đi tiếp.">
+          <img class="img" src="assets/p6.jpg" alt="p6" onerror="placeholder(this)" />
+          <figcaption class="lbl">🔖 “Một lời hứa”</figcaption>
+          <span class="sticker">💌</span>
+        </figure>
+
+        <figure class="card" style="--r:-1.1deg" data-src="assets/p7.jpg" data-title="Chuyến đi" data-cap="Gió, nắng, và em.">
+          <img class="img" src="assets/p7.jpg" alt="p7" onerror="placeholder(this)" />
+          <figcaption class="lbl">🚗 “Chuyến đi”</figcaption>
+          <span class="sticker">🌞</span>
+        </figure>
+
+        <figure class="card" style="--r:2.0deg" data-src="assets/p8.jpg" data-title="Kết" data-cap="Chụp thêm thật nhiều ảnh nữa nha.">
+          <img class="img" src="assets/p8.jpg" alt="p8" onerror="placeholder(this)" />
+          <figcaption class="lbl">🎞️ “Kết”</figcaption>
+          <span class="sticker">🧡</span>
+        </figure>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>🎁 Voucher dễ thương <span class="tag">bonus</span></h2>
+      <div class="timeline">
+        <div class="tItem">
+          <div><span class="date">Voucher #01</span></div>
+          <div>
+            <p class="tTitle">1 cái ôm “không hỏi lý do”</p>
+            <p class="tDesc">Áp dụng mọi lúc. Không hết hạn.</p>
+          </div>
+        </div>
+        <div class="tItem">
+          <div><span class="date">Voucher #02</span></div>
+          <div>
+            <p class="tTitle">Một buổi hẹn do em chọn</p>
+            <p class="tDesc">Ăn gì/đi đâu/em quyết. Anh trả lời “Dạ”.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <footer>
+      made with 💗 • bạn có thể sửa nội dung bất cứ lúc nào trong index.html
+    </footer>
+  </div>
+
+  <!-- Lightbox modal -->
+  <div class="modal" id="modal" aria-hidden="true">
+    <div class="modalBox" role="dialog" aria-modal="true" aria-label="Xem ảnh">
+      <div class="modalTop">
+        <div class="mTitle" id="mTitle">Ảnh</div>
+        <button class="x" id="mClose" type="button">ESC / Close</button>
+      </div>
+      <img class="modalImg" id="mImg" alt="Ảnh phóng to" />
+      <div class="modalCap" id="mCap"></div>
+    </div>
+  </div>
+
+  <script>
+    // Placeholder image generator for missing assets
+    function placeholder(imgEl){
+      const w=900, h=675;
+      const name = (imgEl.getAttribute("src") || "missing").split("/").pop();
+      imgEl.src = "data:image/svg+xml;charset=UTF-8," + encodeURIComponent(
+        `<svg xmlns="http://www.w3.org/2000/svg" width="${w}" height="${h}">
+          <defs>
+            <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0" stop-color="#efefef"/>
+              <stop offset="1" stop-color="#dcdcdc"/>
+            </linearGradient>
+          </defs>
+          <rect width="100%" height="100%" fill="url(#g)"/>
+          <text x="50%" y="46%" dominant-baseline="middle" text-anchor="middle"
+                font-family="Arial" font-size="34" fill="#666">${name}</text>
+          <text x="50%" y="55%" dominant-baseline="middle" text-anchor="middle"
+                font-family="Arial" font-size="20" fill="#888">Hãy thêm ảnh vào thư mục assets/</text>
+        </svg>`
+      );
+    }
+
+    // Lightbox
+    const modal = document.getElementById('modal');
+    const mImg  = document.getElementById('mImg');
+    const mCap  = document.getElementById('mCap');
+    const mTitle= document.getElementById('mTitle');
+    const mClose= document.getElementById('mClose');
+
+    function openModal(src, title, cap){
+      mImg.src = src;
+      mTitle.textContent = title || "Ảnh";
+      mCap.innerHTML = `
+        <div>${cap ? cap : " "}</div>
+        <div class="hint">Tip: bấm ESC để đóng • bấm ngoài nền để đóng</div>
+      `;
+      modal.classList.add('open');
+      modal.setAttribute('aria-hidden', 'false');
+    }
+    function closeModal(){
+      modal.classList.remove('open');
+      modal.setAttribute('aria-hidden', 'true');
+      mImg.src = "";
+    }
+
+    document.getElementById('gallery').addEventListener('click', (e)=>{
+      const card = e.target.closest('.card');
+      if(!card) return;
+      openModal(card.dataset.src, card.dataset.title, card.dataset.cap);
+    });
+
+    modal.addEventListener('click', (e)=>{
+      if(e.target === modal) closeModal();
+    });
+    mClose.addEventListener('click', closeModal);
+    document.addEventListener('keydown', (e)=>{
+      if(e.key === 'Escape') closeModal();
+    });
+
+    // Secret message
+    document.getElementById('btnSecret').addEventListener('click', ()=>{
+      openModal(
+        "assets/hero.jpg",
+        "Bí mật 💗",
+        `<b>Em là nhà của anh.</b><br/>Nếu em đọc đến đây, cho anh xin 1 cái ôm nhé 😚`
+      );
+      burstHearts(18);
+    });
+
+    // Floating hearts
+    function spawnHeart(){
+      const el = document.createElement('div');
+      el.className = 'heart';
+      const hearts = ["💗","💖","💘","💝","💞","🫶","✨"];
+      el.textContent = hearts[Math.floor(Math.random()*hearts.length)];
+      const x = Math.random()*100;
+      const s = 16 + Math.random()*22; // font size
+      const d = 4 + Math.random()*4;   // duration seconds
+      el.style.setProperty('--x', x + 'vw');
+      el.style.setProperty('--s', s + 'px');
+      el.style.setProperty('--d', d + 's');
+      document.body.appendChild(el);
+      setTimeout(()=> el.remove(), (d*1000)+200);
+    }
+    function burstHearts(n=12){
+      for(let i=0;i<n;i++){
+        setTimeout(spawnHeart, i*70);
+      }
+    }
+
+    document.getElementById('btnHearts').addEventListener('click', ()=> burstHearts(22));
+  </script>
+</body>
+</html>
