@@ -6,102 +6,6 @@
   <title>Scrapbook của chúng mình</title>
   <meta name="description" content="Một scrapbook nhỏ dành cho người thương." />
   <style>
-    /* --- RETRO SCRAPBOOK THEME (paper + halftone + torn edge) --- */
-
-/* Optional: retro-ish fonts (fallback ok even if not loaded) */
-:root{
-  --retro-ink:#1f1b16;
-  --retro-paper:#fff6e6;
-  --retro-paper2:#fffdf7;
-  --retro-shadow: 0 14px 0 rgba(0,0,0,.12), 0 30px 60px rgba(0,0,0,.14);
-  --dot: rgba(0,0,0,.08);
-  --stroke: rgba(0,0,0,.18);
-}
-
-/* Add halftone dots overlay to sections/cards */
-.section, .tItem, .card, .hero{
-  position: relative;
-}
-
-/* Retro paper + torn edge vibe */
-.section{
-  background: linear-gradient(180deg, var(--retro-paper2), var(--retro-paper));
-  border: 2px solid var(--stroke);
-  box-shadow: var(--retro-shadow);
-  border-radius: 22px;
-  overflow: hidden;
-}
-
-/* Halftone dots layer */
-.section::before{
-  content:"";
-  position:absolute; inset:0;
-  pointer-events:none;
-  background:
-    radial-gradient(circle at 12px 12px, var(--dot) 1.2px, transparent 1.4px);
-  background-size: 18px 18px;
-  opacity:.55;
-  mix-blend-mode:multiply;
-}
-
-/* Torn/zigzag bottom edge */
-.section::after{
-  content:"";
-  position:absolute;
-  left:-10px; right:-10px; bottom:-14px;
-  height:28px;
-  background:
-    linear-gradient(135deg, transparent 75%, rgba(0,0,0,.10) 0) 0 0/16px 16px,
-    linear-gradient(225deg, transparent 75%, rgba(0,0,0,.10) 0) 8px 8px/16px 16px;
-  opacity:.35;
-  pointer-events:none;
-  filter: blur(.2px);
-}
-
-/* Title looks like stamped label */
-.section h2 .tag{
-  background: rgba(0,0,0,.06);
-  border: 2px solid rgba(0,0,0,.16);
-  box-shadow: 0 6px 0 rgba(0,0,0,.10);
-  transform: rotate(-1deg);
-}
-
-/* Timeline items: retro dashed + slight wobble */
-.tItem{
-  background: rgba(255,255,255,.82);
-  border: 2px dashed rgba(0,0,0,.28);
-  box-shadow: 0 10px 0 rgba(0,0,0,.10), 0 18px 28px rgba(0,0,0,.10);
-  border-radius: 18px;
-}
-.tItem:nth-child(odd){ transform: rotate(-.4deg); }
-.tItem:nth-child(even){ transform: rotate(.35deg); }
-
-/* Gallery cards: thicker border + sticker corner */
-.card{
-  border: 2px solid rgba(0,0,0,.20);
-  box-shadow: 0 12px 0 rgba(0,0,0,.12), 0 26px 40px rgba(0,0,0,.14);
-}
-.card::before{
-  content:"";
-  position:absolute;
-  top:-10px; left:12px;
-  width:70px; height:26px;
-  background: rgba(247,216,124,.85);
-  border: 2px solid rgba(0,0,0,.16);
-  border-radius: 10px;
-  transform: rotate(-8deg);
-  box-shadow: 0 8px 0 rgba(0,0,0,.10);
-  opacity:.92;
-}
-
-/* Make buttons more retro */
-.btn, .chip{
-  border: 2px solid rgba(0,0,0,.18);
-  box-shadow: 0 10px 0 rgba(0,0,0,.10), 0 20px 30px rgba(0,0,0,.10);
-}
-.btn.primary{
-  box-shadow: 0 10px 0 rgba(0,0,0,.12), 0 20px 30px rgba(0,0,0,.14);
-}
     :root{
       --paper: #fbf4e7;
       --paper2:#fffdf7;
@@ -561,6 +465,102 @@
       10%{ opacity:.85; }
       100%{ transform: translateY(-140vh) rotate(360deg); opacity:0; }
     }
+    /* --- RETRO SCRAPBOOK THEME (paper + halftone + torn edge) --- */
+
+/* Optional: retro-ish fonts (fallback ok even if not loaded) */
+:root{
+  --retro-ink:#1f1b16;
+  --retro-paper:#fff6e6;
+  --retro-paper2:#fffdf7;
+  --retro-shadow: 0 14px 0 rgba(0,0,0,.12), 0 30px 60px rgba(0,0,0,.14);
+  --dot: rgba(0,0,0,.08);
+  --stroke: rgba(0,0,0,.18);
+}
+
+/* Add halftone dots overlay to sections/cards */
+.section, .tItem, .card, .hero{
+  position: relative;
+}
+
+/* Retro paper + torn edge vibe */
+.section{
+  background: linear-gradient(180deg, var(--retro-paper2), var(--retro-paper));
+  border: 2px solid var(--stroke);
+  box-shadow: var(--retro-shadow);
+  border-radius: 22px;
+  overflow: hidden;
+}
+
+/* Halftone dots layer */
+.section::before{
+  content:"";
+  position:absolute; inset:0;
+  pointer-events:none;
+  background:
+    radial-gradient(circle at 12px 12px, var(--dot) 1.2px, transparent 1.4px);
+  background-size: 18px 18px;
+  opacity:.55;
+  mix-blend-mode:multiply;
+}
+
+/* Torn/zigzag bottom edge */
+.section::after{
+  content:"";
+  position:absolute;
+  left:-10px; right:-10px; bottom:-14px;
+  height:28px;
+  background:
+    linear-gradient(135deg, transparent 75%, rgba(0,0,0,.10) 0) 0 0/16px 16px,
+    linear-gradient(225deg, transparent 75%, rgba(0,0,0,.10) 0) 8px 8px/16px 16px;
+  opacity:.35;
+  pointer-events:none;
+  filter: blur(.2px);
+}
+
+/* Title looks like stamped label */
+.section h2 .tag{
+  background: rgba(0,0,0,.06);
+  border: 2px solid rgba(0,0,0,.16);
+  box-shadow: 0 6px 0 rgba(0,0,0,.10);
+  transform: rotate(-1deg);
+}
+
+/* Timeline items: retro dashed + slight wobble */
+.tItem{
+  background: rgba(255,255,255,.82);
+  border: 2px dashed rgba(0,0,0,.28);
+  box-shadow: 0 10px 0 rgba(0,0,0,.10), 0 18px 28px rgba(0,0,0,.10);
+  border-radius: 18px;
+}
+.tItem:nth-child(odd){ transform: rotate(-.4deg); }
+.tItem:nth-child(even){ transform: rotate(.35deg); }
+
+/* Gallery cards: thicker border + sticker corner */
+.card{
+  border: 2px solid rgba(0,0,0,.20);
+  box-shadow: 0 12px 0 rgba(0,0,0,.12), 0 26px 40px rgba(0,0,0,.14);
+}
+.card::before{
+  content:"";
+  position:absolute;
+  top:-10px; left:12px;
+  width:70px; height:26px;
+  background: rgba(247,216,124,.85);
+  border: 2px solid rgba(0,0,0,.16);
+  border-radius: 10px;
+  transform: rotate(-8deg);
+  box-shadow: 0 8px 0 rgba(0,0,0,.10);
+  opacity:.92;
+}
+
+/* Make buttons more retro */
+.btn, .chip{
+  border: 2px solid rgba(0,0,0,.18);
+  box-shadow: 0 10px 0 rgba(0,0,0,.10), 0 20px 30px rgba(0,0,0,.10);
+}
+.btn.primary{
+  box-shadow: 0 10px 0 rgba(0,0,0,.12), 0 20px 30px rgba(0,0,0,.14);
+}
   </style>
 </head>
 
