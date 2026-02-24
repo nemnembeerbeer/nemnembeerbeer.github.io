@@ -561,46 +561,21 @@
 .btn.primary{
   box-shadow: 0 10px 0 rgba(0,0,0,.12), 0 20px 30px rgba(0,0,0,.14);
 }
-    /* Draggable face sticker */
 .sticker-face{
   position: fixed;
   left: 24px;
   top: 120px;
   width: 110px;
   height: 110px;
-  z-index: 9999;
+  z-index: 999999;   /* tăng lên để không bị lớp khác chặn */
   cursor: grab;
   user-select: none;
-  touch-action: none; /* quan trọng để kéo trên mobile */
-  transform: translate3d(0,0,0) rotate(-4deg);
-  filter: drop-shadow(0 18px 18px rgba(0,0,0,.20));
+  touch-action: none;
 }
 
 .sticker-face:active{ cursor: grabbing; }
 
-.sticker-face img{
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  border-radius: 22px;
-  border: 2px solid rgba(0,0,0,.18);
-  background: rgba(255,255,255,.8);
-}
-
-/* “Tape” góc cho đúng scrapbook */
-.sticker-face::before{
-  content:"";
-  position:absolute;
-  top:-12px; left: 18px;
-  width: 62px; height: 22px;
-  background: rgba(247,216,124,.85);
-  border: 2px solid rgba(0,0,0,.16);
-  border-radius: 10px;
-  transform: rotate(-10deg);
-  box-shadow: 0 8px 0 rgba(0,0,0,.10);
-  pointer-events:none;
-}
-    .sticker-face, .sticker-face *{
+.sticker-face, .sticker-face *{
   -webkit-user-drag: none;
   user-drag: none;
 }
@@ -875,132 +850,80 @@
         setTimeout(spawnHeart, i*70);
       }
     }
-
-    document.getElementById('btnHearts').addEventListener('click', ()=> burstHearts(22));
-    // --- Draggable sticker (mouse + touch) with localStorage ---
 (function(){
-  const el = document.getElementById('faceSticker');
+  const el = document.getElementById("faceSticker");
   if(!el) return;
 
-  // restore saved position
-  const saved = localStorage.getItem('faceStickerPos');
-  if(saved){
-    try{
-      const {x,y,rot,scale} = JSON.parse(saved);
-      el.style.left = x + 'px';
-      el.style.top  = y + 'px';
-      el.dataset.rot = String(rot ?? -4);
-      el.dataset.scale = String(scale ?? 1);
-      applyTransform();
-    }catch{}
-  }else{
-    el.dataset.rot = "-4";
-    el.dataset.scale = "1";
-    applyTransform();
-  }
+  // chống kéo link/ảnh mặc định
+  el.addEventListener("dragstart", e => e.preventDefault());
+  const img = el.querySelector("img");
+  if(img) img.addEventListener("dragstart", e => e.preventDefault());
+
+  // khởi tạo left/top nếu chưa có
+  const rect0 = el.getBoundingClientRect();
+  el.style.left = (parseFloat(el.style.left) || rect0.left) + "px";
+  el.style.top  = (parseFloat(el.style.top)  || rect0.top)  + "px";
 
   let dragging = false;
-  let startX = 0, startY = 0;
-  let origLeft = 0, origTop = 0;
+  let offsetX = 0, offsetY = 0;
 
   function clamp(v, min, max){ return Math.max(min, Math.min(max, v)); }
 
-  function applyTransform(){
-    const rot = parseFloat(el.dataset.rot || "-4");
-    const scale = parseFloat(el.dataset.scale || "1");
-    el.style.transform = `translate3d(0,0,0) rotate(${rot}deg) scale(${scale})`;
-  }
-
-  function save(){
-    const x = parseFloat(el.style.left || "0");
-    const y = parseFloat(el.style.top  || "0");
-    const rot = parseFloat(el.dataset.rot || "-4");
-    const scale = parseFloat(el.dataset.scale || "1");
-    localStorage.setItem('faceStickerPos', JSON.stringify({x,y,rot,scale}));
-  }
-
-  function onDown(e){
+  function start(clientX, clientY){
     dragging = true;
-    el.setPointerCapture?.(e.pointerId);
-
-    const rect = el.getBoundingClientRect();
-    origLeft = rect.left;
-    origTop  = rect.top;
-    startX = e.clientX;
-    startY = e.clientY;
-
-    // bring to front
-    el.style.zIndex = String(9999);
-
-    e.preventDefault();
+    el.style.cursor = "grabbing";
+    const r = el.getBoundingClientRect();
+    offsetX = clientX - r.left;
+    offsetY = clientY - r.top;
   }
 
-  function onMove(e){
+  function move(clientX, clientY){
     if(!dragging) return;
+    const r = el.getBoundingClientRect();
+    const w = r.width, h = r.height;
 
-    const dx = e.clientX - startX;
-    const dy = e.clientY - startY;
+    const pad = 6;
+    const x = clamp(clientX - offsetX, pad, window.innerWidth - w - pad);
+    const y = clamp(clientY - offsetY, pad, window.innerHeight - h - pad);
 
-    const rect = el.getBoundingClientRect();
-    const w = rect.width;
-    const h = rect.height;
-
-    // keep within viewport with small padding
-    const pad = 8;
-    const maxX = window.innerWidth  - w - pad;
-    const maxY = window.innerHeight - h - pad;
-
-    const nextLeft = clamp(origLeft + dx, pad, maxX);
-    const nextTop  = clamp(origTop  + dy, pad, maxY);
-
-    el.style.left = nextLeft + "px";
-    el.style.top  = nextTop  + "px";
+    el.style.left = x + "px";
+    el.style.top  = y + "px";
   }
 
-  function onUp(){
+  function end(){
     if(!dragging) return;
     dragging = false;
-    save();
+    el.style.cursor = "grab";
   }
 
-  // Pointer events cover mouse + touch
-  el.addEventListener('pointerdown', onDown);
-  window.addEventListener('pointermove', onMove);
-  window.addEventListener('pointerup', onUp);
-
-  // Double click: rotate a bit (fun)
-  el.addEventListener('dblclick', ()=>{
-    const r = parseFloat(el.dataset.rot || "-4");
-    el.dataset.rot = String(r + 12);
-    applyTransform();
-    save();
-    // optional: little hearts if your site has burstHearts()
-    if(typeof burstHearts === "function") burstHearts(10);
+  // Mouse
+  el.addEventListener("mousedown", (e)=>{
+    e.preventDefault();
+    start(e.clientX, e.clientY);
   });
 
-  // Mouse wheel: scale (desktop)
-  el.addEventListener('wheel', (e)=>{
+  window.addEventListener("mousemove", (e)=> move(e.clientX, e.clientY));
+  window.addEventListener("mouseup", end);
+
+  // Touch (mobile)
+  el.addEventListener("touchstart", (e)=>{
+    const t = e.touches[0];
+    start(t.clientX, t.clientY);
     e.preventDefault();
-    const s = parseFloat(el.dataset.scale || "1");
-    const delta = e.deltaY > 0 ? -0.06 : 0.06;
-    const next = clamp(s + delta, 0.6, 1.8);
-    el.dataset.scale = String(next);
-    applyTransform();
-    save();
   }, { passive:false });
+
+  window.addEventListener("touchmove", (e)=>{
+    const t = e.touches[0];
+    if(t) move(t.clientX, t.clientY);
+  }, { passive:true });
+
+  window.addEventListener("touchend", end);
+
 })();
-    // stop native image/link dragging
-el.addEventListener('dragstart', (e) => e.preventDefault());
-const img = el.querySelector('img');
-img && img.addEventListener('dragstart', (e) => e.preventDefault());
   </script>
   <!-- Draggable face sticker -->
-<div id="faceSticker" class="sticker-face" aria-label="Face sticker" title="Kéo thả mình đi 😄">
-  <img src="assets/me.png"
-     alt="My face sticker"
-     draggable="false"
-     onerror="this.src='data:image/svg+xml;charset=UTF-8,'+encodeURIComponent(`<svg xmlns=&quot;http://www.w3.org/2000/svg&quot; width=&quot;320&quot; height=&quot;320&quot;><rect width=&quot;100%&quot; height=&quot;100%&quot; rx=&quot;48&quot; fill=&quot;%23ffd6de&quot;/><text x=&quot;50%&quot; y=&quot;50%&quot; dominant-baseline=&quot;middle&quot; text-anchor=&quot;middle&quot; font-family=&quot;Arial&quot; font-size=&quot;20&quot; fill=&quot;%23444&quot;>assets/me.png</text></svg>`);">
-       
+<div id="faceSticker" class="sticker-face" title="Kéo thả mình đi 😄">
+  <img src="assets/me.png" alt="My face sticker" draggable="false">
 </div>
 </body>
 </html>
