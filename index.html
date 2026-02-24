@@ -562,22 +562,27 @@
   box-shadow: 0 10px 0 rgba(0,0,0,.12), 0 20px 30px rgba(0,0,0,.14);
 }
 .sticker-face{
-  position: sticky;
+  position: fixed;
   left: 24px;
   top: 120px;
-  width: 110px;
-  height: 110px;
-  z-index: 999999;   /* tăng lên để không bị lớp khác chặn */
+  width: 120px !important;
+  height: 120px !important;
+  z-index: 999999;
   cursor: grab;
   user-select: none;
   touch-action: none;
+  transform: rotate(-4deg);
+  overflow: hidden;           /* quan trọng */
 }
 
-.sticker-face:active{ cursor: grabbing; }
-
-.sticker-face, .sticker-face *{
-  -webkit-user-drag: none;
-  user-drag: none;
+.sticker-face img{
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: contain;        /* quan trọng: không bị phóng theo canvas */
+  border-radius: 22px;
+  border: 2px solid rgba(0,0,0,.18);
+  background: rgba(255,255,255,.6);
+  display:block;
 }
   </style>
 </head>
