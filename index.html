@@ -588,6 +588,32 @@
   -webkit-user-drag: none;
   user-drag: none;
 }
+    .letterBox{
+  width: 100%;
+  min-height: 180px;
+  resize: vertical;
+  margin-top: 12px;
+  padding: 14px 14px;
+  border-radius: 16px;
+  border: 2px dashed rgba(0,0,0,.22);
+  background: rgba(255,255,255,.85);
+  box-shadow: 0 10px 0 rgba(0,0,0,.10), 0 18px 28px rgba(0,0,0,.10);
+  font-size: 14px;
+  line-height: 1.7;
+  outline: none;
+}
+.letterBox:focus{
+  border-style: solid;
+}
+.letterName{
+  width: min(360px, 100%);
+  margin-top: 12px;
+  padding: 10px 12px;
+  border-radius: 14px;
+  border: 1px solid rgba(0,0,0,.14);
+  background: rgba(255,255,255,.85);
+  font-size: 14px;
+}
   </style>
 </head>
 
@@ -645,7 +671,24 @@
         <small>— Ký tên: Nemnem • 23.02.2026 </small>
       </div>
     </section>
+<section class="section" id="thugui">
+  <h2>💌 Thư của Bebeer <span class="tag">write</span></h2>
 
+  <div class="note" style="border-left-color: rgba(247,216,124,.9); background: rgba(247,216,124,.08);">
+    Bebeer có thể viết trực tiếp ở đây. Nội dung sẽ tự lưu trên máy/trình duyệt này.
+    <small>Gợi ý: bấm “Lưu” để chắc chắn không mất.</small>
+  </div>
+<input id="loveLetterName" class="letterName" placeholder="Bebeer">
+  <textarea id="loveLetterInput" class="letterBox"
+    placeholder="Bebeer viết gì đó cho Nemnem ở đây nha..."></textarea>
+
+  <div class="ctaRow">
+    <button class="btn primary" id="btnSaveLetter" type="button">Lưu thư 💾</button>
+    <button class="btn" id="btnClearLetter" type="button">Xoá (trên máy này) 🧹</button>
+  </div>
+
+  <p id="letterStatus" style="margin:10px 0 0; color:var(--muted); font-family:var(--mono); font-size:12px;"></p>
+</section>
     <section class="section" id="timeline">
       <h2>🗓️ Kỷ niệm <span class="tag">timeline</span></h2>
       <div class="timeline">
@@ -931,6 +974,80 @@
 
   window.addEventListener("touchend", end);
 
+})();
+    // --- Love letter box ---
+(function(){
+  const KEY = "bebeer_love_letter";
+  const nameInput = document.getElementById("loveLetterName");
+  const input = document.getElementById("loveLetterInput");
+  const status = document.getElementById("letterStatus");
+  const btnSave = document.getElementById("btnSaveLetter");
+  const btnClear = document.getElementById("btnClearLetter");
+  const SHEET_API_URL = "https://script.google.com/macros/s/AKfycby1Plg3Yus0ak6Kotwuhn0BGN1kd3TMrI7f6__pY_iuV0gFkxYFs4SoaSiDD80wLkojDA/exec";
+  const SHEET_SECRET_KEY = "nemnembeerbeer_ultrasecret_0391290859028390812908590289018398219038129085902819038018957129769726972917690126890215901273017292173921739812975219759217302183901275"; // giống SECRET_KEY bên Apps Script
+  if(!input || !status || !btnSave || !btnClear) return;
+
+  // load saved
+  const saved = localStorage.getItem(KEY);
+  if(saved) input.value = saved;
+
+  function setStatus(msg){
+    status.textContent = msg;
+    setTimeout(()=>{ if(status.textContent === msg) status.textContent = ""; }, 2500);
+  }
+
+  // autosave while typing (gentle)
+  let t = null;
+  input.addEventListener("input", ()=>{
+    clearTimeout(t);
+    t = setTimeout(()=>{
+      localStorage.setItem(KEY, input.value);
+      setStatus("Đã tự lưu ✨");
+    }, 350);
+  });
+
+  btnSave.addEventListener("click", async ()=>{
+  const payload = {
+    key: SHEET_SECRET_KEY,
+    name: nameInput?.value?.trim() || "Bebeer",
+    message: input.value,
+    ua: navigator.userAgent
+  };
+
+  try{
+    btnSave.disabled = true;
+    btnSave.textContent = "Đang gửi...";
+
+    const res = await fetch(SHEET_API_URL, {
+      method: "POST",
+      headers: { "Content-Type": "text/plain;charset=utf-8" },
+      body: JSON.stringify(payload)
+    });
+
+    const text = await res.text();
+    let data;
+    try { data = JSON.parse(text); } catch { data = { ok:false, error:text }; }
+
+    if(data.ok){
+      setStatus("Đã gửi thư lên ‘kho bí mật’ 💌");
+      if(typeof burstHearts === "function") burstHearts(10);
+      // tuỳ bạn: input.value = "";
+    }else{
+      setStatus("Gửi thất bại: " + (data.error || "Unknown error"));
+    }
+  }catch(err){
+    setStatus("Lỗi mạng: " + String(err));
+  }finally{
+    btnSave.disabled = false;
+    btnSave.textContent = "Lưu thư 💾";
+  }
+});
+
+  btnClear.addEventListener("click", ()=>{
+    input.value = "";
+    localStorage.removeItem(KEY);
+    setStatus("Đã xoá trên máy này 🧹");
+  });
 })();
   </script>
 </div>
