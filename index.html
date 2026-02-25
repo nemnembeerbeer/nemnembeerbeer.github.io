@@ -584,6 +584,10 @@
   background: rgba(255,255,255,.6);
   display:block;
 }
+    .sticker-face, .sticker-face *{
+  -webkit-user-drag: none;
+  user-drag: none;
+}
   </style>
 </head>
 
@@ -855,6 +859,9 @@
         setTimeout(spawnHeart, i*70);
       }
     }
+      <!-- Draggable face sticker -->
+<div id="faceSticker" class="sticker-face" title="Kéo thả mình đi 😄">
+  <img src="assets/me.png" alt="My face sticker" draggable="false">
 (function(){
   const el = document.getElementById("faceSticker");
   if(!el) return;
@@ -926,9 +933,6 @@
 
 })();
   </script>
-  <!-- Draggable face sticker -->
-<div id="faceSticker" class="sticker-face" title="Kéo thả mình đi 😄">
-  <img src="assets/me.png" alt="My face sticker" draggable="true">
 </div>
 </body>
 </html>
