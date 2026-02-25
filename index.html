@@ -834,7 +834,9 @@
         </svg>`
       );
     }
-
+      <!-- Draggable face sticker -->
+<div id="faceSticker" class="sticker-face" title="Kéo thả mình đi 😄">
+  <img src="assets/me.png" alt="My face sticker" draggable="false">
     // Lightbox
     const modal = document.getElementById('modal');
     const mImg  = document.getElementById('mImg');
@@ -902,9 +904,6 @@
         setTimeout(spawnHeart, i*70);
       }
     }
-      <!-- Draggable face sticker -->
-<div id="faceSticker" class="sticker-face" title="Kéo thả mình đi 😄">
-  <img src="assets/me.png" alt="My face sticker" draggable="false">
 (function(){
   const el = document.getElementById("faceSticker");
   if(!el) return;
